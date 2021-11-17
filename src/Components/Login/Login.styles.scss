@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,500&display=swap');
+.login-container{
+    box-sizing: border-box;
+    display: flex;
+    // justify-content: center;
+    // background-color: #afafb5;
+    // height: 100vh;
+    margin-top: 100px;
+    .form-container{
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        // margin: 100px 0px;
+        width: 440px;
+        height: auto;
+        background-color: #fff;
+        box-shadow: 0 2px 12px 0 grey;
+        // border-radius: 16px;
+    
+        .form-header{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+            .form-logo{
+            width:  132px;
+            height: 36.33px;
+            img{
+                width: 100%;
+            }
+            }
+            .form-card{
+              width: 140px;
+              height: 106.77px;
+              margin-top: 60px;
+              margin-bottom: 20px;
+              img{
+                 width: 100%;
+                 height: 100%; 
+              }  
+            }
+            .form-title{
+                font-family: 'Poppins', sans-serif;
+                font-size: 22px;
+            }
+        }
+        .horizantal-seperator{
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+            width: 90%;
+            height: 40px;
+            &::before, &::after {
+                content: '';
+                position: absolute;
+                width: 45%;
+                margin-top: 10px;
+                height: 1px;
+                background-color: #d6d6d6;
+            }
+            &::before{
+                left: 0;
+            }
+            &::after {
+                right: 0;
+            }
+        }
+        .form-content {
+            // padding: 5px ;
+            // box-sizing: border-box;
+            width: 100%;
+            // background-color: green;
+            input{
+             box-sizing: border-box;
+             width: 90%;
+            //  margin-bottom: 10px;
+             height: 60px ;
+             padding: 0 16px;
+             margin: 5px;
+             border: 2px solid #eeeff4 ;
+             border-radius: 6px;
+            }
+            button{
+                margin: 30px 0;
+                color: #fff;
+                background-color: #afafb5;
+                width: 90%;
+                padding: 12px 30px;
+                font-size: 1.2rem;
+                border: none;
+                border-radius: 7.5px;
+            }
+        }
+    }
+}
+
+@media (min-width:600px)  {
+    .login-container{
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width:492)  {
+    .login-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
