@@ -3,6 +3,7 @@
     padding: 20px 35px;
     margin-top: 30px;
     width: 100%;
+    box-shadow: 0 2px 12px 0 grey;
     .signup-header{
         box-sizing: border-box;
         font-family: Poppins,sans-serif;
@@ -23,14 +24,11 @@
         align-items: flex-start;
         width: 100%;
         margin-top: 30px;
-        // padding: 10px;
         input{
             box-sizing: border-box;
             width: 100%;
-           //  margin-bottom: 10px;
             height: 60px ;
             padding: 0 16px;
-            // margin: 8px;
             margin-top: 8px;
             border: 2px solid #eeeff4 ;
             border-radius: 6px;
@@ -51,8 +49,6 @@
                 margin-right: 10px;
             }
             }
-                
-              
     }
 }
 
@@ -60,8 +56,5 @@
     .signup-container{
         width: 440px;
         margin: 200px auto;
-    }
-    .signup-form{
-         
     }
     }

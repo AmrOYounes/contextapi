@@ -2,9 +2,6 @@
 .login-container{
     box-sizing: border-box;
     display: flex;
-    // justify-content: center;
-    // background-color: #afafb5;
-    // height: 100vh;
     margin-top: 100px;
     .form-container{
         box-sizing: border-box;
@@ -12,13 +9,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        // margin: 100px 0px;
         width: 440px;
         height: auto;
         background-color: #fff;
         box-shadow: 0 2px 12px 0 grey;
-        // border-radius: 16px;
-    
         .form-header{
             display: flex;
             flex-direction: column;
@@ -48,6 +42,7 @@
             }
         }
         .horizantal-seperator{
+            text-align: center;
             margin-top: 40px;
             margin-bottom: 20px;
             position: relative;
@@ -69,20 +64,21 @@
             }
         }
         .form-content {
-            // padding: 5px ;
-            // box-sizing: border-box;
             width: 100%;
-            // background-color: green;
+            div{
+                text-align: center;
+            }
             input{
              box-sizing: border-box;
              width: 90%;
-            //  margin-bottom: 10px;
              height: 60px ;
              padding: 0 16px;
              margin: 5px;
              border: 2px solid #eeeff4 ;
              border-radius: 6px;
+            
             }
+            
             button{
                 margin: 30px 0;
                 color: #fff;
@@ -94,6 +90,9 @@
                 border-radius: 7.5px;
             }
         }
+        .sign-up {
+            margin-bottom: 30px;
+        }
     }
 }
 
@@ -101,14 +100,21 @@
     .login-container{
         display: flex;
         justify-content: center;
+        input{
+            &:focus{
+                outline: none;
+                border-color: #006CD0 !important;
+            }
+        }
     }
+   
 }
 
-@media (max-width:492)  {
-    .login-container{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
+// @media (max-width:492)  {
+//     .login-container{
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//     }
+// }
 

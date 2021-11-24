@@ -1,17 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import Login from './Components/Login';
-import Signup from './Components/Signup';
-import './App.css';
+import React, {useState,useEffect} from 'react';
+import Routing from './Components/Routing';
 
-function App() {
+import './App.scss';
+
+export type StateContent = {
+  isAuth: boolean,
+  toggleAuth: () => void,
+
+}
+
+export const userContext = React.createContext<StateContent>({
+  isAuth: false,
+  toggleAuth: () => {},  
+});
+
+ const  App = () =>  {
+ const  isValidToken = !!localStorage.getItem('Auth-token');
+ const [isAuth, setIsAuth] = useState <boolean>(isValidToken);
+ const toggleAuth = () => {
+  setIsAuth(!isAuth);
+ }
+
+ const initialState : StateContent = {
+  isAuth,
+  toggleAuth,
+ }
+
   return (
-    <div className="App">
-      {/* <Signup/> */}
-      {/* <hr/> */}
-      <Login/>
-      
-    </div>
+    <userContext.Provider value={initialState}>
+        <Routing/>
+   </userContext.Provider>
   );
 }
 
