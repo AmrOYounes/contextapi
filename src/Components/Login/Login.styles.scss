@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,500&display=swap');
+@import '../../scss/mixins';
 .login-container{
     box-sizing: border-box;
     display: flex;
@@ -64,30 +65,42 @@
             }
         }
         .form-content {
-            width: 100%;
+            width: 90%;
             div{
                 text-align: center;
             }
-            input{
-             box-sizing: border-box;
-             width: 90%;
-             height: 60px ;
-             padding: 0 16px;
-             margin: 5px;
-             border: 2px solid #eeeff4 ;
-             border-radius: 6px;
-            
+            .valid-error{
+             margin-left: 5px;
+             color: #FF0000;
+             font-size: 15px;
             }
-            
+            .error-icon{
+                width: 14px;
+                height: 14px;
+                margin-left: 6px;
+                margin-top: 4px;
+            }
+            input{
+             @include inputStyple;
+            }
+            .error-feild {
+                outline: none;
+                border-color: red !important;
+            }
             button{
                 margin: 30px 0;
                 color: #fff;
                 background-color: #afafb5;
-                width: 90%;
+                width: 100%;
                 padding: 12px 30px;
                 font-size: 1.2rem;
                 border: none;
                 border-radius: 7.5px;
+            }
+
+            .valid-form{
+                background-color: #006cd0;
+                cursor: pointer;
             }
         }
         .sign-up {
@@ -107,6 +120,7 @@
             }
         }
     }
+   
    
 }
 

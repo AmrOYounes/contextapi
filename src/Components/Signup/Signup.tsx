@@ -11,6 +11,11 @@ const Signup = () => {
   const [promoCode, setPromoCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isValidFname, setIsValidFname] = useState(true);
+  const [isValidLastName, setIsValidLastName] = useState(true);
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isValidPassword, setIsValidPassword] = useState(true);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

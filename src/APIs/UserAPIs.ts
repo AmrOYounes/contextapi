@@ -6,7 +6,7 @@ const users: userInfo[] = [
     middleName: "othman",
     lastName: "younis",
     promoCode: "22fff3",
-    password: "123456",
+    password: "12345678",
   },
 ];
 
