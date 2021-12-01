@@ -28,6 +28,12 @@
         input{
             @include inputStyple;
            }
+           .error-icon{
+            @include errorIcon;
+       }
+       .error-feild {
+        @include errorField;
+   }
            button{
             margin: 30px 0;
             color: #fff;
@@ -38,6 +44,9 @@
             border: none;
             border-radius: 7.5px;
         }
+        .valid-form{
+            @include validForm
+         }
             .fname-midname-container{
                 display: flex;
             .fname-wrapper{

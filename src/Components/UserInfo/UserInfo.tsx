@@ -1,6 +1,7 @@
 import React, {useState,useContext, useEffect} from 'react'
 import './UserInfo.styles.scss';
 import {userContext} from '../../App';
+import {toggleAuth} from '../../AppReducer/action';
 import {getSpecificUser} from '../../APIs/UserAPIs';
 
 type userInfo = {
@@ -13,7 +14,7 @@ type userInfo = {
 }
 
 const UserInfo = () => {
-  const {toggleAuth} = useContext(userContext);
+  const {state,dispatch} = React.useContext(userContext);
   
   const [userdata, setUserData] = useState<userInfo>({});
   useEffect( ()=> {
@@ -26,7 +27,7 @@ const UserInfo = () => {
   }, []);
 
   const handleLogout = () => {
-    toggleAuth()
+    dispatch(toggleAuth());
     localStorage.clear()
   }
     return (

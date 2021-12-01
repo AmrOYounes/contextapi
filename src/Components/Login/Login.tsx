@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect } from "react";
 import "./Login.styles.scss";
 import { FORMLOGO } from "../../consts";
 import CardImage from "../../assets/images/card.png";
@@ -6,45 +6,42 @@ import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import { isUser } from "../../APIs/UserAPIs";
 import ErrorIcon from "../../assets/images/error.png";
-import {Validate} from '../../utils/utils';
+import { validate } from "../../utils/utils";
+import {
+  toggleAuth,
+  setUser,
+  setInputValidStatus,
+  setIsValidForm,
+  resetInputField,
+} from "../../AppReducer/action";
+import { errorFieldClass, validFormClass } from "../../consts";
 
-const errorFieldClass = "error-feild";
-const validFormClass = "valid-form";
 const Login = () => {
   const navigate = useNavigate();
-  const { toggleAuth } = React.useContext(userContext);
-  const [userName, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmailValid, setIsEmailVaild] = useState(true);
-  const [ispasswordValid, setIsPasswordValid] = useState(true);
-  const [isformValid, setIsFormVaild] = useState(false);
-  const [formErrors, setFormErrors] = useState({ email: "", password: "" });
+  const { state, dispatch } = React.useContext(userContext);
+  const { email, password, isEmailValid, ispasswordValid, isformValid } = state;
 
   useEffect(() => {
-    
     vaildForm();
   }, [isEmailValid, ispasswordValid]);
 
+  useEffect(() => {
+    return () => dispatch(resetInputField());
+  }, []);
   const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, value } = e.target;
-    if (type === "email") {
-      setUsername(value);
-      ValidateField(name, value);
-    } else {
-      setPassword(value);
-      ValidateField(name, value);
-    }
+    const { name, value } = e.target;
+    dispatch(setInputValidStatus(name, value));
   };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userName && password) {
-      isUser(userName, password).then((res) => {
+    if (email && password) {
+      isUser(email, password).then((res) => {
         if (res) {
-          toggleAuth();
+          dispatch(toggleAuth());
           navigate("/");
           localStorage.setItem("Auth-token", "test");
-          localStorage.setItem("email", userName);
+          localStorage.setItem("email", email);
         }
       });
     }
@@ -52,41 +49,11 @@ const Login = () => {
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    ValidateField(name, value);
+    dispatch(setInputValidStatus(name, value));
   };
 
   const vaildForm = () => {
-    if (isEmailValid && ispasswordValid && userName && password) {
-      setIsFormVaild(true);
-    } else setIsFormVaild(false);
-    // setIsFormVaild(ispasswordValid && isEmailValid )
-  };
-
-  const ValidateField = (type: string, value: string) => {
-    let emailValid = isEmailValid;
-    let validPassword = ispasswordValid;
-    switch (type) {
-      case "email":
-        if (value === "") {
-          formErrors.email = "Required";
-          setIsEmailVaild(false);
-        } else {
-          emailValid =  Validate('email', value) as boolean;
-          if (!emailValid) formErrors.email = "Not valid email";
-          setIsEmailVaild(emailValid);
-        }
-
-        break;
-      case "password":
-        if (value === "") {
-          formErrors.password = "Required";
-          setIsPasswordValid(false);
-        } else {
-          validPassword = Validate('password', value) as boolean;
-          if (!validPassword) formErrors.password = "Not Valid Password";
-          setIsPasswordValid(validPassword);
-        }
-    }
+    dispatch(setIsValidForm());
   };
 
   return (
@@ -111,13 +78,13 @@ const Login = () => {
                 placeholder="Email *"
                 onChange={handlechange}
                 onBlur={handleBlur}
-                className={isEmailValid ? "" : errorFieldClass}
+                className={state.isEmailValid ? "" : errorFieldClass}
               />
             </div>
-            {!isEmailValid && (
+            {!state.isEmailValid && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{formErrors.email}</span>
+                <span className="valid-error">{state.formErrors.email}</span>
               </>
             )}
             <div>
@@ -127,14 +94,14 @@ const Login = () => {
                 placeholder="Password *"
                 onChange={handlechange}
                 onBlur={handleBlur}
-                className={ispasswordValid ? "" : errorFieldClass}
+                className={state.ispasswordValid ? "" : errorFieldClass}
                 required
               />
             </div>
-            {!ispasswordValid && (
+            {!state.ispasswordValid && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{formErrors.password}</span>
+                <span className="valid-error">{state.formErrors.password}</span>
               </>
             )}
             <div>

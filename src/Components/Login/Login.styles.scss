@@ -75,17 +75,14 @@
              font-size: 15px;
             }
             .error-icon{
-                width: 14px;
-                height: 14px;
-                margin-left: 6px;
-                margin-top: 4px;
+                 @include errorIcon;
             }
             input{
              @include inputStyple;
+             margin: 5px 0; 
             }
             .error-feild {
-                outline: none;
-                border-color: red !important;
+                 @include errorField;
             }
             button{
                 margin: 30px 0;
@@ -99,8 +96,7 @@
             }
 
             .valid-form{
-                background-color: #006cd0;
-                cursor: pointer;
+               @include validForm
             }
         }
         .sign-up {
@@ -123,12 +119,4 @@
    
    
 }
-
-// @media (max-width:492)  {
-//     .login-container{
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//     }
-// }
 

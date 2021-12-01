@@ -1,33 +1,19 @@
-import React, {useState,useEffect} from 'react';
+import React, {useReducer, useMemo} from 'react';
 import Routing from './Components/Routing';
-
+import { initialState, userReducer} from './AppReducer/reducer';
 import './App.scss';
-
-export type StateContent = {
-  isAuth: boolean,
-  toggleAuth: () => void,
-
-}
-
-export const userContext = React.createContext<StateContent>({
-  isAuth: false,
-  toggleAuth: () => {},  
-});
-
- const  App = () =>  {
+export const userContext: any = React.createContext({});
+ const  App : React.FC = () =>  {
  const  isValidToken = !!localStorage.getItem('Auth-token');
- const [isAuth, setIsAuth] = useState <boolean>(isValidToken);
- const toggleAuth = () => {
-  setIsAuth(!isAuth);
- }
+ const [state, dispatch] : any = useReducer(userReducer, initialState);
+ const {isAuth, email} = state;
 
- const initialState : StateContent = {
-  isAuth,
-  toggleAuth,
- }
 
+ const contextValue = useMemo(() => {
+  return { state, dispatch };
+}, [state, dispatch]);
   return (
-    <userContext.Provider value={initialState}>
+    <userContext.Provider value={contextValue}>
         <Routing/>
    </userContext.Provider>
   );

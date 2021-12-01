@@ -11,3 +11,20 @@
     border-color: #006CD0 !important;
   }
 }
+
+@mixin errorIcon {
+   width: 14px;
+   height: 14px;
+   margin-left: 6px;
+   margin-top: 4px;
+}
+
+@mixin errorField {
+  outline: none;
+  border-color: red !important;
+}
+
+@mixin validForm {
+  background-color: #006cd0;
+  cursor: pointer;
+}
