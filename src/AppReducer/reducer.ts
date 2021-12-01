@@ -33,12 +33,12 @@ export const initialState: StateContent = {
   isValidCode: true,
   isMiddleNameValid: true,
   formErrors: {
-  email: "",
-  password: "",
-  fName: "",
-  lName: "",
-  mName: "",
-  code: "",
+    email: "",
+    password: "",
+    fName: "",
+    lName: "",
+    mName: "",
+    code: "",
   },
 };
 
@@ -46,7 +46,6 @@ export const userReducer = (state: any, action: Action) => {
   let temp = { ...state };
 
   switch (action.type) {
-
     case SET_AUTH:
       return {
         ...state,
@@ -54,7 +53,6 @@ export const userReducer = (state: any, action: Action) => {
       };
 
     case SET_FIELDS_VALIDATION:
-
       const { name, value } = action.payload;
       switch (name) {
 
@@ -65,7 +63,8 @@ export const userReducer = (state: any, action: Action) => {
               isEmailValid: false,
               formErrors: { ...state.formErrors, email: "Required" },
             };
-          } else {
+          } 
+          else {
             if (!validate(EMAIL_TYPE, value)) {
               temp = {
                 ...state,
@@ -73,11 +72,13 @@ export const userReducer = (state: any, action: Action) => {
                 isEmailValid: false,
                 formErrors: { ...state.formErrors, email: "Not valid email" },
               };
-            } else {
+            } 
+            else {
               temp = { ...state, email: value, isEmailValid: true };
             }
           }
-          return temp;
+
+          break;
 
         case PASSWORD_TYPE:
           if (!value) {
@@ -86,7 +87,8 @@ export const userReducer = (state: any, action: Action) => {
               ispasswordValid: false,
               formErrors: { ...state.formErrors, password: "Required" },
             };
-          } else {
+          }
+           else {
             if (!validate(PASSWORD_TYPE, value)) {
               temp = {
                 ...state,
@@ -97,11 +99,13 @@ export const userReducer = (state: any, action: Action) => {
                   password: "Not valid password",
                 },
               };
-            } else {
+            } 
+            else {
               temp = { ...state, password: value, ispasswordValid: true };
             }
           }
           break;
+
         case FIRST_NAME:
           if (!value) {
             temp = {
@@ -109,7 +113,8 @@ export const userReducer = (state: any, action: Action) => {
               isFirstNameValid: false,
               formErrors: { ...state.formErrors, fName: "Required" },
             };
-          } else {
+          } 
+          else {
             if (!validate("name", value)) {
               temp = {
                 ...state,
@@ -120,18 +125,21 @@ export const userReducer = (state: any, action: Action) => {
                   fName: "Not valid name",
                 },
               };
-            } else {
+            } 
+            else {
               temp = { ...state, firstName: value, isFirstNameValid: true };
             }
           }
           break;
+
         case MIDDLE_Name:
           if (!value) {
             temp = {
               ...state,
               isMiddleNameValid: true,
             };
-          } else {
+          } 
+          else {
             if (!validate("name", value)) {
               temp = {
                 ...state,
@@ -142,11 +150,13 @@ export const userReducer = (state: any, action: Action) => {
                   mName: "Not valid name",
                 },
               };
-            } else {
+            } 
+            else {
               temp = { ...state, middleName: value, isMiddleNameValid: true };
             }
           }
           break;
+
         case LAST_NAME:
           if (!value) {
             temp = {
@@ -154,7 +164,8 @@ export const userReducer = (state: any, action: Action) => {
               isLastNameValid: false,
               formErrors: { ...state.formErrors, lName: "Required" },
             };
-          } else {
+          } 
+          else {
             if (!validate("name", value)) {
               temp = {
                 ...state,
@@ -165,11 +176,13 @@ export const userReducer = (state: any, action: Action) => {
                   lName: "Not valid name",
                 },
               };
-            } else {
+            } 
+            else {
               temp = { ...state, lastName: value, isLastNameValid: true };
             }
           }
       }
+
       return temp;
 
     case SET_ISVALID_FORM:
@@ -185,8 +198,8 @@ export const userReducer = (state: any, action: Action) => {
 
     case SET_ISSIGNUP_FROM_VALID:
       return {
-          ...state,
-          isSignupFormValid: !!(
+        ...state,
+        isSignupFormValid: !!(
           state.isEmailValid &&
           state.ispasswordValid &&
           state.isFirstNameValid &&
@@ -197,6 +210,7 @@ export const userReducer = (state: any, action: Action) => {
           state.lastName
         ),
       };
+
     case RESET_INPUTS:
       return {
         ...state,
@@ -205,6 +219,7 @@ export const userReducer = (state: any, action: Action) => {
         isEmailValid: true,
         ispasswordValid: true,
       };
+      
     default:
       return temp;
   }

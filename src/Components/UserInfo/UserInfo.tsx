@@ -15,8 +15,8 @@ type userInfo = {
 
 const UserInfo = () => {
   const {state,dispatch} = React.useContext(userContext);
-  
   const [userdata, setUserData] = useState<userInfo>({});
+
   useEffect( ()=> {
     const  userEmail = localStorage.getItem('email');
    getSpecificUser(userEmail as string).then( res => {
@@ -47,8 +47,6 @@ const UserInfo = () => {
         )}
       </div>
     )
-     
-    
 }
 
 export default UserInfo;
