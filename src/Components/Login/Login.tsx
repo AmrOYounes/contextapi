@@ -1,4 +1,4 @@
-import React, {useEffect } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import "./Login.styles.scss";
 import { FORMLOGO } from "../../consts";
 import CardImage from "../../assets/images/card.png";
@@ -7,30 +7,67 @@ import { userContext } from "../../App";
 import { isUser } from "../../APIs/UserAPIs";
 import ErrorIcon from "../../assets/images/error.png";
 import { validate } from "../../utils/utils";
-import {
-  toggleAuth,
-  setUser,
-  setInputValidStatus,
-  setIsValidForm,
-  resetInputField,
-} from "../../AppReducer/action";
+import { toggleAuth } from "../../Store/action";
 import { errorFieldClass, validFormClass } from "../../consts";
 
 const Login = () => {
   const navigate = useNavigate();
   const { state, dispatch } = React.useContext(userContext);
-  const { email, password, isEmailValid, ispasswordValid, isformValid } = state;
+
+  const [email, setEamil] = useState("");
+  const [password, setPassword] = useState("");
+  const [formInputsValidation, setFomInputsValidation] = useState({
+    email: true,
+    password: true,
+  });
+  const [isformValid, setIsFormValid] = useState(false);
+  const [formErrors, setFormErros] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    vaildForm();
-  }, [isEmailValid, ispasswordValid]);
+    setIsFormValid(
+      !!(
+        formInputsValidation.email &&
+        formInputsValidation.password &&
+        email &&
+        password
+      )
+    );
+  }, [formInputsValidation.email, formInputsValidation.password]);
 
-  useEffect(() => {
-    return () => dispatch(resetInputField());
-  }, []);
+  const validateInputField = (type: string, value: string) => {
+    let formValidationCopy: any = { ...formInputsValidation };
+    let formErrorCopy: any = { ...formErrors };
+
+    if (!value) {
+      formValidationCopy[type] = false;
+      formErrorCopy[type] = "Required";
+      setFomInputsValidation(formValidationCopy);
+      setFormErros(formErrorCopy);
+    } else {
+      if (validate(type, value)) {
+        formValidationCopy[type] = true;
+        setFomInputsValidation(formValidationCopy);
+      } else {
+        formValidationCopy[type] = false;
+        formErrorCopy[type] = "Not Valid";
+        setFomInputsValidation(formValidationCopy);
+        setFormErros(formErrorCopy);
+      }
+    }
+  };
+
   const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    dispatch(setInputValidStatus(name, value));
+    const { type, value } = e.target;
+    switch (type) {
+      case "email":
+        setEamil(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+    }
+
+    validateInputField(type, value);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -48,12 +85,8 @@ const Login = () => {
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    dispatch(setInputValidStatus(name, value));
-  };
-
-  const vaildForm = () => {
-    dispatch(setIsValidForm());
+    const { type, value } = e.target;
+    validateInputField(type, value);
   };
 
   return (
@@ -78,13 +111,13 @@ const Login = () => {
                 placeholder="Email *"
                 onChange={handlechange}
                 onBlur={handleBlur}
-                className={state.isEmailValid ? "" : errorFieldClass}
+                className={formInputsValidation.email ? "" : errorFieldClass}
               />
             </div>
-            {!state.isEmailValid && (
+            {!formInputsValidation.email && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{state.formErrors.email}</span>
+                <span className="valid-error">{formErrors.email}</span>
               </>
             )}
             <div>
@@ -94,14 +127,14 @@ const Login = () => {
                 placeholder="Password *"
                 onChange={handlechange}
                 onBlur={handleBlur}
-                className={state.ispasswordValid ? "" : errorFieldClass}
+                className={formInputsValidation.password ? "" : errorFieldClass}
                 required
               />
             </div>
-            {!state.ispasswordValid && (
+            {!formInputsValidation.password && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{state.formErrors.password}</span>
+                <span className="valid-error">{formErrors.password}</span>
               </>
             )}
             <div>

@@ -1,15 +1,16 @@
 import React, { useReducer, useMemo } from "react";
 import Routing from "./Components/Routing";
-import { initialState, userReducer } from "./AppReducer/reducer";
+import { initialState, userReducer } from "./Store/reducer";
 import "./App.scss";
 export const userContext: any = React.createContext({});
+
 const App: React.FC = () => {
   const isValidToken = !!localStorage.getItem("Auth-token");
-  const [state, dispatch]: any = useReducer(userReducer, initialState);
+  const [state, dispatchAction]: any = useReducer(userReducer, initialState);
 
   const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]);
+    return { state, dispatchAction };
+  }, [state, dispatchAction]);
 
   return (
     <userContext.Provider value={contextValue}>

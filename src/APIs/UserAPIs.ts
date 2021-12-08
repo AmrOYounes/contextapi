@@ -31,7 +31,7 @@ export const isUser = (userMail: string, userPassword: string) => {
   return isUserPromise;
 };
 
-export const signup = (data: userInfo) => {
+export const signup = (data: any) => {
   if (data) {
     users.push(data);
   }

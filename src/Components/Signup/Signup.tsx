@@ -1,41 +1,147 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useReducer } from "react";
 import { signup } from "../../APIs/UserAPIs";
 import { useNavigate } from "react-router-dom";
-import {setInputValidStatus, resetInputField, setIsSignupFormValid} from '../../AppReducer/action';
 import { userContext } from "../../App";
 import ErrorIcon from "../../assets/images/error.png";
-import {errorFieldClass, validFormClass} from './../../consts';
+import { errorFieldClass, validFormClass } from "./../../consts";
+import { validate } from "../../utils/utils";
+import { setUserInfo } from "../../Store/action";
 import "./Signup.styles.scss";
+import { type } from "os";
+import { stat } from "fs";
+
+const initialState = {
+  firstName: "",
+  middleName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  code: "",
+  formErrors: { fName: "", mName: "", lName: "", email: "", password: "" },
+  formValidation: {
+    firstName: true,
+    middleName: true,
+    lastName: true,
+    email: true,
+    password: true,
+  },
+  isFormValid: false,
+};
+
+const setInput = (value: any) => ({
+  type: "SET_INPUTS",
+  payload: value,
+});
+
+const signupReducer = (state: any, action: any) => {
+  switch (action.type) {
+    case "SET_INPUTS":
+      return {
+        ...state,
+        ...action.payload,
+      };
+  }
+};
 
 const Signup = () => {
-   
-  const {state,dispatch} = React.useContext(userContext);
- const {firstName,lastName,email,password,isFirstNameValid, isLastNameValid, isSignupFormValid,isMiddleNameValid, formErrors} = state;
+  const { dispatchAction } = React.useContext(userContext);
+  //  const {isFirstNameValid, isLastNameValid, isSignupFormValid,isMiddleNameValid, formErrors} = state;
   let navigate = useNavigate();
- 
+
+  const [state, dispatch] = useReducer(signupReducer, initialState);
+  useEffect(() => {
+    dispatch(
+      setInput({
+        isFormValid:
+          state.formValidation.firstName &&
+          state.formValidation.lastName &&
+          state.formValidation.middleName &&
+          state.formValidation.email &&
+          state.formValidation.password &&
+          state.firstName &&
+          state.lastName &&
+          state.email &&
+          state.password,
+      })
+    );
+  }, [
+    state.formValidation.firstName,
+    state.formValidation.lastName,
+    state.formValidation.middleName,
+    state.formValidation.email,
+    state.formValidation.password,
+  ]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      dispatch(setInputValidStatus(name, value))
-}
-   useEffect ( ()=> {
-    vaildForm();
-   },[firstName, lastName, email, password]) 
+    const { name, value } = e.target;
+    dispatch(setInput({ [name]: value }));
+    validateInputField(name, value);
+  };
 
-const vaildForm = () => {
-  dispatch(setIsSignupFormValid())
- };
+  const validateInputField = (type: string, value: string) => {
+    if (!value) {
+      dispatch(
+        setInput({ formValidation: { ...state.formValidation, [type]: false } })
+      );
+      dispatch(
+        setInput({ formErrors: { ...state.formErrors, [type]: "Required" } })
+      );
+    } else {
+      if (validate(type, value)) {
+        dispatch(
+          setInput({
+            formValidation: { ...state.formValidation, [type]: true },
+          })
+        );
+      } else {
+        dispatch(
+          setInput({
+            formValidation: { ...state.formValidation, [type]: false },
+          })
+        );
+        dispatch(
+          setInput({ formErrors: { ...state.formErrors, [type]: "Not Valid" } })
+        );
+      }
+    }
+  };
 
-  const handleSignup = () => {
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { firstName, middleName, lastName, email, password, code } = state;
+
     const userInfo = {
       firstName,
+      middleName,
       lastName,
       email,
       password,
+      code,
     };
-    // signup(userInfo);
+    dispatchAction(setUserInfo(userInfo));
+    signup(userInfo);
     navigate("/login");
   };
- 
+
+  //  useEffect ( ()=> {
+  //   vaildForm();
+  //  },[firstName, lastName, email, password])
+
+  // const vaildForm = () => {
+  //   dispatch(setIsSignupFormValid())
+  //  };
+
+  // const handleSignup = () => {
+  //   const userInfo = {
+  //     firstName,
+  //     lastName,
+  //     email,
+  //     password,
+  //   };
+  //   // signup(userInfo);
+  //   navigate("/login");
+  // };
+
   return (
     <div className="signup-container">
       <div className="signup-header">
@@ -52,56 +158,64 @@ const vaildForm = () => {
             <div className="fname-wrapper">
               <input
                 type="text"
-                name="f-name"
+                name="firstName"
                 placeholder="First Name *"
                 onChange={handleChange}
-                className={ isFirstNameValid? "" : errorFieldClass}
+                className={
+                  state.formValidation.firstName ? "" : errorFieldClass
+                }
                 required
               />
-               {! isFirstNameValid && (
-              <>
-                <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{formErrors.fName}</span>
-              </>
-            )}
+              {!state.formValidation.firstName && (
+                <>
+                  <img src={ErrorIcon} alt="error" className="error-icon" />
+                  <span className="valid-error">
+                    {state.formErrors.firstName}
+                  </span>
+                </>
+              )}
             </div>
             <div>
               <input
                 type="text"
-                name="mid-name"
+                name="middleName"
                 placeholder="Middle Name"
                 onChange={handleChange}
-                className={ isMiddleNameValid? "" : errorFieldClass}
+                className={
+                  state.formValidation.middleName ? "" : errorFieldClass
+                }
                 required
               />
-              {! isMiddleNameValid && (
-              <>
-                <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{formErrors.mName}</span>
-              </>
-            )}
+              {!state.formValidation.middleName && (
+                <>
+                  <img src={ErrorIcon} alt="error" className="error-icon" />
+                  <span className="valid-error">
+                    {state.formErrors.middleName}
+                  </span>
+                </>
+              )}
             </div>
           </div>
           <div>
             <input
               type="text"
-              name="l-name"
+              name="lastName"
               placeholder="Last Name *"
               onChange={handleChange}
-              className={ isLastNameValid ? "" : errorFieldClass}
+              className={state.formValidation.lastName ? "" : errorFieldClass}
               required
             />
-              {! isLastNameValid && (
+            {!state.formValidation.lastName && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
-                <span className="valid-error">{formErrors.lName}</span>
+                <span className="valid-error">{state.formErrors.lastName}</span>
               </>
             )}
           </div>
           <div>
             <input
               type="text"
-              name="p-code"
+              name="code"
               placeholder="Promo Code (optional)"
               onChange={handleChange}
               required
@@ -113,10 +227,10 @@ const vaildForm = () => {
               name="email"
               placeholder="Enter your e-mail address"
               onChange={handleChange}
-              className={ state.isEmailValid ? "" : errorFieldClass}
+              className={state.formValidation.email ? "" : errorFieldClass}
               required
             />
-              {!state.isEmailValid && (
+            {!state.formValidation.email && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
                 <span className="valid-error">{state.formErrors.email}</span>
@@ -129,10 +243,10 @@ const vaildForm = () => {
               name="password"
               placeholder="Create password"
               onChange={handleChange}
-              className={state.ispasswordValid ? "" : errorFieldClass}
+              className={state.formValidation.password ? "" : errorFieldClass}
               required
             />
-            {!state.ispasswordValid && (
+            {!state.formValidation.password && (
               <>
                 <img src={ErrorIcon} alt="error" className="error-icon" />
                 <span className="valid-error">{state.formErrors.password}</span>
@@ -140,7 +254,12 @@ const vaildForm = () => {
             )}
           </div>
           <div>
-            <button type="submit" onClick={handleSignup} disabled={!isSignupFormValid} className={isSignupFormValid ? validFormClass : ""}>
+            <button
+              type="submit"
+              disabled={!state.isFormValid}
+              className={state.isFormValid ? validFormClass : ""}
+              onClick={handleSignup}
+            >
               {" "}
               Continue
             </button>

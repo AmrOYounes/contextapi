@@ -8,7 +8,7 @@ const validate = (type: string, value: string) => {
       const validPassword = value.length >= 8;
       return validPassword;
 
-    case "name":
+      default: 
       const namePattern = /^[a-zA-Z]+$/;
       return namePattern.test(value);
   }
