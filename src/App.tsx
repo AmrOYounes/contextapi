@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer, useMemo } from "react";
+import Routing from "./Components/Routing";
+import { initialState, userReducer } from "./Store/reducer";
+import "./App.scss";
+export const userContext: any = React.createContext({});
 
-function App() {
+const App: React.FC = () => {
+  const isValidToken = !!localStorage.getItem("Auth-token");
+  const [state, dispatchAction]: any = useReducer(userReducer, initialState);
+
+  const contextValue = useMemo(() => {
+    return { state, dispatchAction };
+  }, [state, dispatchAction]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <userContext.Provider value={contextValue}>
+      <Routing />
+    </userContext.Provider>
   );
-}
+};
 
 export default App;

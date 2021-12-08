@@ -1,0 +1,64 @@
+@import '../../scss/mixins';
+.signup-container{
+    box-sizing: border-box;
+    padding: 20px 35px;
+    margin-top: 30px;
+    width: 100%;
+    box-shadow: 0 2px 12px 0 grey;
+    .signup-header{
+        box-sizing: border-box;
+        font-family: Poppins,sans-serif;
+       .header-title{
+           font-size: 1.325rem;
+           font-weight: 500;
+           text-align: start;
+           margin-bottom: 20px;
+       }
+       .header-description{
+          width: 100%;
+          text-align: start;
+          color:  #75758a;
+       } 
+    }
+    .signup-form {
+        box-sizing: border-box;
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 30px;
+        input{
+            @include inputStyple;
+           }
+           .error-icon{
+            @include errorIcon;
+       }
+       .error-feild {
+        @include errorField;
+   }
+           button{
+            margin: 30px 0;
+            color: #fff;
+            background-color: #afafb5;
+            width: 100%;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 7.5px;
+        }
+        .valid-form{
+            @include validForm
+         }
+            .fname-midname-container{
+                display: flex;
+            .fname-wrapper{
+                margin-right: 10px;
+            }
+            }
+    }
+}
+
+@media (min-width:480px)  {
+    .signup-container{
+        width: 440px;
+        margin: 200px auto;
+    }
+    }
